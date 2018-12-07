@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // var ObjectId = mongoose.Schema.Types.ObjectId;
+// Use object ID in later commits
 
 
 // Create Post Schema
