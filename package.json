@@ -1,0 +1,19 @@
+{
+  "name": "basic_rest_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mssui/basic_rest_api_wMongoose.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mssui/basic_rest_api_wMongoose/issues"
+  },
+  "homepage": "https://github.com/mssui/basic_rest_api_wMongoose#readme"
+}
