@@ -8,18 +8,18 @@ const Posts = require('../services/post-service');
       router.get('/', async (req, res, next) => {
         
         const postMap = await Posts.findAll();   
-        let userInfo = []; 
+        let postData = []; 
         // For loop to filter the main data from postMap
         for (var i = 0; i < postMap.length; i++) {
-            userInfo.push({
+            postData.push({
                 title: postMap[i].title,
                 slug: postMap[i].slug,
                 id: postMap[i].id,
                 comments : postMap[i].comments
             });
         }
-        res.send(userInfo);
-        // Or we can use map method like below commented out.
+        res.send(postData);
+        // Or i can use map method like below commented out.
         // const other = postMap.map((data)=>{return data.title;});
         // res.send(other);
     });

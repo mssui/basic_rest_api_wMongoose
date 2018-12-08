@@ -5,7 +5,7 @@ const bodyparser = require('body-parser');
 
 mongoose.Promise = global.Promise;
 const port = process.env.PORT || 3030;
-mongoose.connect('mongodb://localhost/siznasil');
+mongoose.connect('mongodb://localhost/aslitest');
 
 var app = express();
 

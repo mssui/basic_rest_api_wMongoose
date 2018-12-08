@@ -1,19 +1,25 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-// var ObjectId = mongoose.Schema.Types.ObjectId;
-// Use object ID in later commits
 
 
-// Create Post Schema
+// create post Schema
 
-var PostSchema = new Schema({
+ const PostSchema = new Schema({
     title:  String,
     slug: String,
-    comments: [{ 
-        body: String, 
-        date: Date, 
-        author: String
-        }],
+    comments: [
+      {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Comment"
+      }    
+  ],
+  addedBy: {
+    id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    username: String
+  },
     hidden: {
         type: Boolean,
         default: false
@@ -24,9 +30,7 @@ var PostSchema = new Schema({
     }
   });
 
-// Turn that schema to a model
-const Posts = mongoose.model('posts', PostSchema); 
 
-// Export the model
-module.exports = Posts;
+  // Turn that schema to a model
+module.exports = mongoose.model('posts', PostSchema); 
 
