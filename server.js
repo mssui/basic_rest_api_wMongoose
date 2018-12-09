@@ -22,3 +22,30 @@ app.use('/', require('./routes/api'));
 app.listen(port, ()=>{
     console.log('Server is running on:', port)
 });
+
+// var story1 = new Comment({
+//     title: 'Casino Royale',
+// });
+
+// var test = new Posts({
+//     _id: new mongoose.Types.ObjectId(),
+//     title: 'Ogilvy',
+//     slug: 'ogilvy'
+//   });
+  
+//   test.save(function (err) {
+//     if (err) return handleError(err);
+  
+//     var story1 = new Comment({
+//       title: 'Casino Royale',
+//       author: {
+//         main: test._id // assign the _id from the person
+//       }
+  
+//     });
+  
+//     story1.save(function (err) {
+//       if (err) return handleError(err);
+//       // thats it!
+//     });
+//   });

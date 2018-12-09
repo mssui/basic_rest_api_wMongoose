@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 // create post Schema
 
  const PostSchema = new Schema({
+    
     title:  String,
     slug: String,
     comments: [
@@ -23,10 +24,6 @@ const Schema = mongoose.Schema;
     hidden: {
         type: Boolean,
         default: false
-    },
-    meta: {
-      votes: Number,
-      favs:  Number
     }
   });
 

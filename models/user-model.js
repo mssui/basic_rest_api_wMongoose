@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-// create post Schema
+// create User Schema
 
 var userSchema = new Schema({
   username: String,

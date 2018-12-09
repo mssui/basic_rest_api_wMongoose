@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-// create post Schema
+// create Comment Schema
 
 
 var commentSchema = new Schema({
+  
   text: String,
   author: {
       id: {
@@ -20,4 +21,7 @@ var commentSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model("Comment", commentSchema);
+var Comment = mongoose.model('Comment', commentSchema);
+module.exports = Comment;
+
+

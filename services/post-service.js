@@ -8,7 +8,12 @@ async function add(Posts) {
     return postModel.create(Posts);
 }
 
+async function findOne(id) {
+    return postModel.findOne({id}).populate('comments');
+}
+
 module.exports = {
     findAll,
-    add
+    add,
+    findOne
 };

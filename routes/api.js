@@ -1,32 +1,31 @@
 const express = require ('express');
 const router = express.Router();
 const Posts = require('../services/post-service');
+const Comments = require('../services/comment-service');
 
 
 // get a list of posts from the db
 
-      router.get('/', async (req, res, next) => {
-        
-        const postMap = await Posts.findAll();   
-        let postData = []; 
-        // For loop to filter the main data from postMap
-        for (var i = 0; i < postMap.length; i++) {
-            postData.push({
-                title: postMap[i].title,
-                slug: postMap[i].slug,
-                id: postMap[i].id,
-                comments : postMap[i].comments
-            });
-        }
-        res.send(postData);
-        // Or i can use map method like below commented out.
-        // const other = postMap.map((data)=>{return data.title;});
-        // res.send(other);
-    });
-
+router.get('/posts', async (req, res, next) => {
+    const postMap = await Posts.findAll();   
+    let postData = []; 
+    // For loop to filter the main data from postMap
+    for (var i = 0; i < postMap.length; i++) {
+        postData.push({
+            title: postMap[i].title,
+            slug: postMap[i].slug,
+            id: postMap[i].id,
+            comments : postMap[i].comments
+        });
+    }
+    res.send(postData);
+    // Or i can use map method like below commented out.
+    // const other = postMap.map((data)=>{return data.title;});
+    // res.send(other);
+});
     
 // add a new post to the db
-router.post('/add', async (req, res, next) => {
+router.post('/addpost', async (req, res, next) => {
     const newpost = await Posts.add(req.body);
     res.send(newpost);
 });
@@ -41,11 +40,81 @@ router.put('/posts/:id', function(req, res, next){
     }).catch(next);
 });
 
+// Add comment to existing post
+
+
+router.post('/posts/:id/add',  function(req, res, next){
+        
+// Send the req.body than find interface, push it in comments Array.
+          
+    Posts.findOne({_id: req.params.id}, req.body).then((post)=>{
+        Comments.add(req.body).then((data)=>{
+            let comment = data;
+        })
+        post.comments.push(comment);
+        res.send(post);
+    }).catch(next)
+});
+
+      
+
 // delete a post from the db
 router.delete('/posts/:id', function(req, res, next){
     Posts.findByIdAndRemove({_id: req.params.id}).then(function(post){
         res.send(post);
     }).catch(next);
+});
+
+
+// ROUTES FOR COMMENTS
+
+// get a list of comments from the db
+
+router.get('/comments', async (req, res, next) => {
+    const postMap = await Comments.findAll();   
+    let postData = []; 
+    // For loop to filter the main data from postMap
+    for (var i = 0; i < postMap.length; i++) {
+        postData.push({
+            text: postMap[i].text,
+            id: postMap[i].id,
+            user : postMap[i].username
+        });
+    }
+    res.send(postData);
+    // Or i can use map method like below commented out.
+    // const other = postMap.map((data)=>{return data.title;});
+    // res.send(other);
+});
+
+    
+// add a new comment to the db
+router.post('/addcomment', async (req, res, next) => {
+    const newcomment = await Comments.add(req.body);
+    res.send(newcomment);
+});
+
+
+// update a comment in the db
+router.put('/comments/:id', function(req, res, next){
+    Comments.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
+        Comments.findOne({_id: req.params.id}).then(function(post){
+            res.send(post);
+        });
+    }).catch(next);
+});
+
+// delete a comment from the db
+router.delete('/comments/:id', function(req, res, next){
+    Comments.findByIdAndRemove({_id: req.params.id}).then(function(post){
+        res.send(post);
+    }).catch(next);
+});
+
+//USER ROUTES USER IS NOT DEFINED YET
+router.get('/allusers', async (req, res, next) => {
+    const newpost = await Users.find(req.body);
+    res.send(newpost);
 });
 
 module.exports = router;
