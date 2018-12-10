@@ -1,7 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const bodyparser = require('body-parser');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;;
+const session = require('express-session');
+const User = require('./models/user-model');
 
 mongoose.Promise = global.Promise;
 const port = process.env.PORT || 3030;
@@ -11,41 +16,35 @@ var app = express();
 
 app.use(cors());
 app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: true}));
 
-// app.use(function (req, res) {
-//   res.setHeader('Content-Type', 'text/plain')
-//   res.write('you posted:\n')
-//   res.end(JSON.stringify(req.body, null, 2))
-// })
+app.use(session({
+    secret: 'hernameislola',
+    resave: true,
+    saveUninitialized : true
+}))
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+      User.findOne({ username: username }, function (err, user) {
+        if (err) { return done(err); }
+        if (!user) {
+          return done(null, false, { message: 'Incorrect username.' });
+        }
+        if (!user.validPassword(password)) {
+          return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+      });
+    }
+  ));
+  
 app.use('/', require('./routes/api'));
+app.use('/auth', require('./routes/auth'));
 
 app.listen(port, ()=>{
     console.log('Server is running on:', port)
 });
 
-// var story1 = new Comment({
-//     title: 'Casino Royale',
-// });
-
-// var test = new Posts({
-//     _id: new mongoose.Types.ObjectId(),
-//     title: 'Ogilvy',
-//     slug: 'ogilvy'
-//   });
-  
-//   test.save(function (err) {
-//     if (err) return handleError(err);
-  
-//     var story1 = new Comment({
-//       title: 'Casino Royale',
-//       author: {
-//         main: test._id // assign the _id from the person
-//       }
-  
-//     });
-  
-//     story1.save(function (err) {
-//       if (err) return handleError(err);
-//       // thats it!
-//     });
-//   });
