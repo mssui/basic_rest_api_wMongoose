@@ -4,6 +4,7 @@ const Posts = require('../services/post-service');
 const Comments = require('../services/comment-service');
 
 
+
 // get a list of posts from the db
 
 router.get('/posts', async (req, res, next) => {
@@ -43,20 +44,17 @@ router.put('/posts/:id', function(req, res, next){
 // Add comment to existing post
 
 
-router.post('/posts/:id/add',  function(req, res, next){
+router.post('/posts/:id/add',  async function(req, res, next){
         
-// Send the req.body than find interface, push it in comments Array.
-          
-    Posts.findOne({_id: req.params.id}, req.body).then((post)=>{
-        Comments.add(req.body).then((data)=>{
-            let comment = data;
-        })
-        post.comments.push(comment);
-        res.send(post);
-    }).catch(next)
+    const searchedpost= await Posts.findById({_id: req.params.id}); // Find the post with that ID
+    const commentdata = await Comments.add(req.body); // Add the comment to comments colletion
+
+    searchedpost.comments.push(commentdata.id); // Push the commment ID to Post's comment array
+    const updated = searchedpost.save();
+    res.send(updated);
+
 });
 
-      
 
 // delete a post from the db
 router.delete('/posts/:id', function(req, res, next){

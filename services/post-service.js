@@ -9,11 +9,23 @@ async function add(Posts) {
 }
 
 async function findOne(id) {
-    return postModel.findOne({id}).populate('comments');
+    return postModel.findOne({id});
 }
+
+
+async function findById(id) {
+    return postModel.findOne(id);
+}
+
+async function findPost(params) { 
+    return  Posts.findById(params).populate('comments')
+}
+
 
 module.exports = {
     findAll,
     add,
-    findOne
+    findOne,
+    findById,
+    findPost
 };
