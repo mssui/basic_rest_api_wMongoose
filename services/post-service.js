@@ -1,7 +1,7 @@
 const postModel = require('../models/posts-model');
 
   async function findAll() { 
-    return postModel.find();
+    return postModel.find().populate('comments')
 }
 
 async function add(Posts) {
@@ -18,7 +18,7 @@ async function findById(id) {
 }
 
 async function findPost(params) { 
-    return  Posts.findById(params).populate('comments')
+    return  Posts.findById(params)
 }
 
 

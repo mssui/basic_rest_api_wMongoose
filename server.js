@@ -25,7 +25,8 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
-
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 passport.use(new LocalStrategy(
     function(username, password, done) {
       User.findOne({ username: username }, function (err, user) {
