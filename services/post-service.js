@@ -20,12 +20,15 @@ async function findById(id) {
 async function findPost(params) { 
     return  Posts.findById(params)
 }
-
+async function findSlug(params) { 
+    return postModel.find(params)
+}
 
 module.exports = {
     findAll,
     add,
     findOne,
     findById,
-    findPost
+    findPost,
+    findSlug
 };

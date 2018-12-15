@@ -32,7 +32,7 @@ router.post('/addpost', async (req, res, next) => {
 });
 
 
-// update a post in the db
+// update a post in the 
 router.put('/posts/:id', function(req, res, next){
     Posts.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
         Posts.findOne({_id: req.params.id}).then(function(post){
@@ -46,15 +46,22 @@ router.put('/posts/:id', function(req, res, next){
 
 router.post('/posts/:id/add',  async function(req, res, next){
         
-    const searchedpost= await Posts.findById({_id: req.params.id}); // Find the post with that ID
-    const commentdata = await Comments.add(req.body); // Add the comment to comments colletion
+    // const searchedpost= await Posts.findById({_id: req.params.id}); // Find the post with that ID
+    // const commentdata = await Comments.add(req.body); // Add the comment to comments colletion
 
-    searchedpost.comments.push(commentdata.id); // Push the commment ID to Post's comment array
-    const updated = searchedpost.save();
-    res.send(updated);
+    // searchedpost.comments.push(commentdata.id); // Push the commment ID to Post's comment array
+    // const updated = searchedpost.save();
+    // res.send(updated).catch(next);
+
+    Posts.findById({_id: req.params.id}).then((searchedpost)=>{
+        Comments.add(req.body).then((commentdata)=>{
+            searchedpost.comments.push(commentdata.id);
+            const updated = searchedpost.save();
+        res.send(updated)
+        }).catch(next);
+    })
 
 });
-
 
 // delete a post from the db
 router.delete('/posts/:id', function(req, res, next){
@@ -114,5 +121,24 @@ router.get('/allusers', async (req, res, next) => {
     const newpost = await Users.find(req.body);
     res.send(newpost);
 });
+
+//Slug Search Route, Get ID if it is already in DB
+
+    // router.get('/slugs', async (req, res) => {   
+    //     const newslug = await Posts.findSlug({slug: req.body});
+    //     res.send(newslug);
+    // });
+
+router.get('/slugs/:id',   function(req, res, next){
+        
+    // const searchedslug=  Posts.findSlug({slug: req.params.id}); // Find the post with that ID
+    // res.send(searchedslug).catch(next);
+
+    Posts.findSlug({slug: req.params.id}).then(function(data){
+        res.send(data);
+    }).catch(next);
+
+});
+
 
 module.exports = router;
