@@ -11,8 +11,4 @@
     }
   }
 </script>
-mponents: {
-    mainland
-  }
-}
-</script>
+
