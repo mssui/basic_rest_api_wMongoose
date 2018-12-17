@@ -117,7 +117,7 @@ export default {
     },
   methods: {
       gonderi(){
-          // let user= firebase.auth().currentUser.uid
+          // let user= currentUser.uid
           // if (user && this.entry && this.okuma) { 
 
         if ( this.entry && this.okuma) { // Make sure fields are true, later User ID will be in this control like above
@@ -169,18 +169,6 @@ export default {
                 console.log(error);
               });
 
-               
-
-
-
-
-
-                
-
-                    
-              
-              
-                
 
           // Empty The Fields
             this.okuma = null
@@ -231,35 +219,9 @@ export default {
         });
 
 
-console.log('List',this.list);
-
   },
   mounted(){
        
-
-  //   for (var i = 0; i < this.mains.length; i++) {
-  //   var currentData = this.mains[i];
-  //   this.titles.push(currentData.title);
-  //     for (var j=0; j < currentData.comments.length; j++) {
-  //     var currentComment = currentData.comments[j];
-  //     this.comments.push(currentComment.text);
-  //       }
-  // }
-  //        var data = [ { "title": "Yeni bir comment", "slug": "yeni-bir-comment", "id": "5c111f2a71ee9d4498447d1a", "comments": [ { "author": { "username": "David" }, "_id": "5c111f4171ee9d4498447d1b", "text": "Yeni bir comment", "__v": 0 } ] }, { "title": "Ogilvy", "slug": "ogilvy", "id": "5c1141e113667615383ae693", "comments": [ { "author": { "username": "David" }, "_id": "5c11421d13667615383ae694", "text": "ogilvi", "__v": 0 }, { "author": { "username": "Aslı" }, "_id": "5c11422a13667615383ae695", "text": "ogilviy", "__v": 0 } ] }, { "title": "ambulance", "slug": "ambulance", "id": "5c1142e413667615383ae69a", "comments": [ { "author": { "username": "David" }, "_id": "5c11430313667615383ae69b", "text": "embulıns", "__v": 0 }, { "author": { "username": "Asli" }, "_id": "5c11431f13667615383ae69c", "text": "ambulans", "__v": 0 } ] } ];
-  //       var titles = [ambulance];
-  //       var comments = [ambulıns, ambulans, embulıns, ];
-  //       for (var i = 0; i < data.length; i++) {
-  //           titles.push(data[i].title);
-  //           comments.push(data[i].comments[i].text);
-  //               };
-        
-  //               console.log(titles);
-  //               console.log(comments);
-      
-  //     Last Comment için
-      // this.mains[i].title && this.mains[i].comments[comments.length]
-    // console.log(this.mains[0].comments[comments.length]);
-    
 
   }
 }
