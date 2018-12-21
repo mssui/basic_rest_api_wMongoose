@@ -100,8 +100,9 @@ export default {
 //     }
 // }    
 
-        postSend: async (event) => {
+        postSend: async function (event){
           event.preventDefault();
+          
         try {
           if (this.entry && this.read) { 
           this.slug = slugify(this.entry, {replacement: '-',remove: /[$*_+~.()'"!\-:@]/g,lower: true}).toString(); //Create a slug
@@ -109,19 +110,21 @@ export default {
         // Check this slug, if it is already in database, add the read to its directory
         
         let slugRes = await axios.get(`http://localhost:3030/slugs/${this.slug}`);
-        let slugData  = await slugRes.data[0]._id;
-        console.log(slugData);
+        console.log(slugRes);
+        let slugData  = slugRes.data[0]._id;
         // If Slug is true, save the comment to it's ID
         if (slugData) {
           const postSlug = await axios.post(`http://localhost:3030/posts/${slugData}/add`, {
                                   text: this.read,
                                   author: {username: 'test'}});
+                                  console.log('added to existing post');
           return postSlug;
         // If Slug is false, create a new comment with new post ID
         } else {
           const postNew = await axios.post('http://localhost:3030/addpost', {
                                 title: this.entry,
                                 slug: this.slug})
+                                console.log('created new post');
           return postNew;
         }
         
