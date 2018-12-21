@@ -64,7 +64,7 @@
 <!-- Footer Banner -->
   <footer class="footer">
     <div class="content has-text-centered">
-    <p><strong>SND</strong> by Aslı Arı. The source code is published<a href="https://github.com/mssui">on GitHub</a></p>
+    <p><strong>SND</strong> by Aslı Arı. The source code is published<a href="https://github.com/mssui"> on GitHub</a></p>
     </div>
   </footer>
 </div>
@@ -92,13 +92,25 @@ export default {
       navbar
     },
   methods: {             
-        postSend: async () => {
-        if (this.entry && this.read) { 
+//     let main = async () =>{
+//     try{
+//         test();
+//     }catch(error){
+//         console.log("error in main() =", error);
+//     }
+// }    
+
+        postSend: async (event) => {
+          event.preventDefault();
+        try {
+          if (this.entry && this.read) { 
           this.slug = slugify(this.entry, {replacement: '-',remove: /[$*_+~.()'"!\-:@]/g,lower: true}).toString(); //Create a slug
         }
         // Check this slug, if it is already in database, add the read to its directory
-        let slugRes = await axios.get(`http://localhost:3030/slugs/${this.slug}`)
-        let slugData  = slugRes.data[0]._id;
+        
+        let slugRes = await axios.get(`http://localhost:3030/slugs/${this.slug}`);
+        let slugData  = await slugRes.data[0]._id;
+        console.log(slugData);
         // If Slug is true, save the comment to it's ID
         if (slugData) {
           const postSlug = await axios.post(`http://localhost:3030/posts/${slugData}/add`, {
@@ -112,8 +124,12 @@ export default {
                                 slug: this.slug})
           return postNew;
         }
-        // throw new Error("Error on postSend");
-      } 
+        
+        } catch(error){
+        console.log("error in postSend() =", error);
+    }
+        
+      }         
     },
   props: {
     msg: String
