@@ -6,10 +6,10 @@
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
-          Medium title
+          Animation
         </h1>
         <h2 class="subtitle">
-          Medium subtitle
+          Comes here
         </h2>
       </div>
     </div>
@@ -32,22 +32,14 @@
         <div class="block">{{ feedback }}</div>
     </div>
   </div>
-<!-- These part for testing, will be deleted -->
-  <div class="container">
-    <h1 class="title">Title Loop</h1>
-    <ul>
-      <li v-for="(title,index) in titles" :key="index"> {{ title }} </li>
-    </ul>
-    <h1 class="title">Comment Loop</h1>
-    <ul>      
-      <li v-for="(comment,index) in comments" :key="index"> {{ comment }} <br></li>
-    </ul>
-  </div>
+  
       <!-- Latest Entries Loop -->
-  <div class="columns is-mobile">
+  <div id="contain-loop">
+  <!-- <div class="columns is-mobile">
     <div class="column is-three-fifths is-offset-one-fifth m-lg">
     <div class="card-content">
-      <p class="title">"Ogilvy diye yazılır,CORRECT SIDE Ogilvi diye okunur.”</p>
+      <p class="read">"Ogilvy </p>diye yazılır, 
+      <p class="write">Ogilvi diye okunur.”</p>
       <p class="subtitle is-pulled-right">Username</p>
     </div>
     <footer class="card-footer is-half is-pulled-right">
@@ -59,8 +51,8 @@
       </p>
     </footer>
     </div>
-  </div>
-
+  </div> -->
+</div>
 <!-- Footer Banner -->
   <footer class="footer">
     <div class="content has-text-centered">
@@ -92,40 +84,41 @@ export default {
       navbar
     },
   methods: {             
-//     let main = async () =>{
-//     try{
-//         test();
-//     }catch(error){
-//         console.log("error in main() =", error);
-//     }
-// }    
-
         postSend: async function (event){
           event.preventDefault();
-          
         try {
           if (this.entry && this.read) { 
           this.slug = slugify(this.entry, {replacement: '-',remove: /[$*_+~.()'"!\-:@]/g,lower: true}).toString(); //Create a slug
         }
         // Check this slug, if it is already in database, add the read to its directory
-        
         let slugRes = await axios.get(`http://localhost:3030/slugs/${this.slug}`);
-        console.log(slugRes);
-        let slugData  = slugRes.data[0]._id;
+        let slugId  = slugRes.data && slugRes.data[0] && slugRes.data[0]._id;
+
         // If Slug is true, save the comment to it's ID
-        if (slugData) {
-          const postSlug = await axios.post(`http://localhost:3030/posts/${slugData}/add`, {
+        if (slugId) {
+          const postToSlug = await axios.post(`http://localhost:3030/posts/${slugId}/add`, {
                                   text: this.read,
                                   author: {username: 'test'}});
-                                  console.log('added to existing post');
-          return postSlug;
+                                  console.log('Added to existing post');
+          return postToSlug;
         // If Slug is false, create a new comment with new post ID
         } else {
-          const postNew = await axios.post('http://localhost:3030/addpost', {
+          try {
+          const postNew =  await axios.post('http://localhost:3030/addpost', {
                                 title: this.entry,
                                 slug: this.slug})
-                                console.log('created new post');
-          return postNew;
+                                console.log('Created new post');
+          const postFirstcomment =  await axios.post(`http://localhost:3030/posts/${this.slug}/add`, {
+                                  text: this.read,
+                                  author: {username: 'test'}});
+                                  console.log('first comment of the post');
+          
+          return {
+       postNew, postFirstcomment
+    }
+          }catch(error){
+        console.log("error in Else section", error);
+    }
         }
         
         } catch(error){
@@ -155,12 +148,29 @@ export default {
         //     this.comments.push(currentComment.text);
         //       }
         // }
+        
+        var container = document.getElementById("contain-loop");
         for (var i = 0; i < this.mains.length; i++) {
           var currentData = this.mains[i];
           this.titles.push(currentData.title);
+          container.innerHTML += '<div class="columns is-mobile"><div class="column is-three-fifths is-offset-one-fifth m-lg"><div class="card-content"></div><footer class="card-footer is-half is-pulled-right"><p class="card-footer-item"><a class="button is-small  is-fullwidth is-success is-outlined">DOĞRU</a></p><p class="card-footer-item"><a class="button is-small is-fullwidth is-danger is-outlined">YANLIŞ</a></p></footer></div></div>';
+          
+          var read = document.createElement('span');
+          read.className = 'read';
+          document.getElementsByClassName('card-content')[i].appendChild(read).innerHTML += currentData.title + ' <span class="stabletext"> diye yazılır,</span>';
+
           // Select the div and append child for the title
-            var currentComment = currentData.comments[currentData.comments.length -1];
-            this.comments.push(currentComment.text);
+          var currentComment = currentData.comments[currentData.comments.length -1];
+          this.comments.push(currentComment.text);
+          var write = document.createElement('span');
+          write.className = 'write';
+          document.getElementsByClassName('card-content')[i].appendChild(write).innerHTML += currentComment.text + ' <span class="stabletext"> diye okunur.</span>';
+          
+          // Will change after auth
+          var username = document.createElement('p');
+          username.className = 'subtitle is-pulled-right';
+          document.getElementsByClassName('card-content')[i].appendChild(username).innerHTML += 'UserName'
+
         }
       })
       .catch(error => {
@@ -174,6 +184,31 @@ export default {
 </script>
 
 <style>
+
+input[type=text] {    
+  height: 4em !important;    
+}    
+ 
+.read {
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color:blueviolet;
+}
+
+.write{
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color:cadetblue;
+}
+
+.stable-text{
+  display: inline-block;
+  font-size: 18px;
+}
 .m-lg {
   margin: 1em;
 }
@@ -195,6 +230,7 @@ li {
 a {
   color: #42b983;
 }
+
 #main-form{
  background: #42b983;     
     }
