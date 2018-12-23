@@ -103,28 +103,19 @@ export default {
           return postToSlug;
         // If Slug is false, create a new comment with new post ID
         } else {
-          try {
-          const postNew =  await axios.post('http://localhost:3030/addpost', {
+          axios.post('http://localhost:3030/addpost', {
                                 title: this.entry,
-                                slug: this.slug})
-                                console.log('Created new post');
-          const postFirstcomment =  await axios.post(`http://localhost:3030/posts/${this.slug}/add`, {
-                                  text: this.read,
-                                  author: {username: 'test'}});
-                                  console.log('first comment of the post');
-          
-          return {
-       postNew, postFirstcomment
-    }
-          }catch(error){
-        console.log("error in Else section", error);
-    }
+                                slug: this.slug}).then(response=>{
+                                  console.log(response.data._id)
+                                      axios.post(`http://localhost:3030/posts/${response.data._id}/add`, {
+                                      text: this.read,
+                                      author: {username: 'test'}}).then(final => {console.log('created', final)
+                                      })
+                                })
         }
-        
         } catch(error){
         console.log("error in postSend() =", error);
     }
-        
       }         
     },
   props: {
