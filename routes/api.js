@@ -124,18 +124,13 @@ router.get('/allusers', async (req, res, next) => {
 
 //Slug Search Route, Get ID if it is already in DB
 
-    // router.get('/slugs', async (req, res) => {   
-    //     const newslug = await Posts.findSlug({slug: req.body});
-    //     res.send(newslug);
-    // });
-
-router.get('/slugs/:id',   function(req, res, next){
+router.get('/slugs/:id',   async function(req, res, next){
         
     // const searchedslug=  Posts.findSlug({slug: req.params.id}); // Find the post with that ID
     // res.send(searchedslug).catch(next);
 
-    Posts.findSlug({slug: req.params.id}).then(function(data){
-        res.send(data);
+    await Posts.findSlug({slug: req.params.id}).then(function(post){
+        res.send(post);
     }).catch(next);
 
 });

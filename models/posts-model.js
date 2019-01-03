@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 // create post Schema
 
  const PostSchema = new Schema({
-    
+    type: mongoose.Schema.Types.ObjectId,
     title:  String,
     slug: String,
     comments: [

@@ -7,6 +7,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;;
 const session = require('express-session');
 const User = require('./models/user-model');
+var expressVue = require("express-vue");
 
 mongoose.Promise = global.Promise;
 const port = process.env.PORT || 3030;
@@ -14,19 +15,24 @@ mongoose.connect('mongodb://localhost/aslitest');
 
 var app = express();
 
+const expressVueMiddleware = expressVue.init();
+app.use(expressVueMiddleware);
 app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
+
 
 app.use(session({
     secret: 'hernameislola',
     resave: true,
     saveUninitialized : true
 }))
-app.use(passport.initialize());
-app.use(passport.session());
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use(passport.initialize());
+app.use(passport.session());
 passport.use(new LocalStrategy(
     function(username, password, done) {
       User.findOne({ username: username }, function (err, user) {
@@ -44,6 +50,10 @@ passport.use(new LocalStrategy(
   
 app.use('/', require('./routes/api'));
 app.use('/auth', require('./routes/auth'));
+app.get('/auth/login', (req,res,next)=>{
+  res.render({username : req.user.username})
+}
+);
 
 app.listen(port, ()=>{
     console.log('Server is running on:', port)

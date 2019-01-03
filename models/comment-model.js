@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 
 var commentSchema = new Schema({
-  
+  type: mongoose.Schema.Types.ObjectId,
   text: String,
   author: {
       id: {
