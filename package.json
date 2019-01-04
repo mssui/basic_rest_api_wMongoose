@@ -18,19 +18,24 @@
   },
   "homepage": "https://github.com/mssui/basic_rest_api_wMongoose#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "express-vue": "^5.8.2",
+    "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.3.15",
+    "morgan": "^1.9.1",
     "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
-    "vueify": "^9.4.1"
+    "pug-cli": "^1.0.0-alpha6"
   },
   "devDependencies": {
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.18.9",
+    "pug": "^2.0.3"
   }
 }
