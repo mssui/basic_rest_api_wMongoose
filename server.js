@@ -15,6 +15,7 @@ mongoose.connect('mongodb://localhost/aslitest');
 
 var app = express();
 
+// app.set('view engine', 'html');
 
 app.use(cors());
 app.use(bodyparser.json());
@@ -27,8 +28,15 @@ app.use(session({
     saveUninitialized : true
 }))
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser((user, done) => {
+  done(null, user.id); // ID is enough to store
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id).then((user) => {
+         done(null, user);
+        });
+ });
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -37,6 +45,7 @@ passport.use(new LocalStrategy(User.authenticate()));
   
 app.use('/', require('./routes/api'));
 app.use('/auth', require('./routes/auth'));
+app.use('/profile', require('./routes/profile-route'));
 
 
 app.get('/auth/login', (req,res,next)=>{

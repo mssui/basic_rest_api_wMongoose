@@ -7,7 +7,7 @@
            <!-- Login -->
            <div class="field">
             <p class="control has-icons-left has-icons-right">
-                <input id="username"  v-model.trim="login.username">
+                <input type="username" id="username"  v-model.trim="login.username">
                 <span class="icon is-small is-left">
                 <i class="fas fa-envelope"></i>
                 </span>
@@ -48,7 +48,7 @@ import axios from 'axios'
     data(){
         return{
         login: {
-            usernam: null,
+            username: null,
             password:null
         },
         errors: []
@@ -56,8 +56,15 @@ import axios from 'axios'
     },
     methods: {
       userSubmit: function (){
+        let self = this;
       axios.post(`http://localhost:3030/auth/login/`, this.login)
-      .then(response=>{console.log(response)})     
+      .then(response=>{
+         if (response.status == '200') {
+          let strdata = JSON.parse(response.config.data)
+          localStorage.setItem('user', strdata.username)
+          self.$router.push('/profile');
+      }
+      })     
       .catch(e => {
         console.log(e)
         this.errors.push(e)

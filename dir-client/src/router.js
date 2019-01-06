@@ -5,6 +5,7 @@ import mainland from '@/components/mainland'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -29,6 +30,12 @@ export default new Router({
       path: '/auth/register',
       name: 'register',
       component: () => import(/* webpackChunkName: "about" */ './views/register.vue')
+    }
+    ,
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import(/* webpackChunkName: "about" */ './views/profile.vue')
     }
   ]
 })
