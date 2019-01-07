@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 const bodyparser = require('body-parser');
+const cookieParser = require('cookie-parser')
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;;
 const session = require('express-session');
@@ -17,17 +17,13 @@ var app = express();
 
 // app.set('view engine', 'html');
 
-app.use(cors());
+
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
+app.use(cookieParser())
 
-
-app.use(session({
-    secret: 'hernameislola',
-    resave: true,
-    saveUninitialized : true
-}))
-
+app.use(session({ secret: 'hernameislola', saveUninitialized: false, resave: false, cookie: { maxAge: 1000 } }));
+app.use('*', cors());
 passport.serializeUser((user, done) => {
   done(null, user.id); // ID is enough to store
 });

@@ -10,11 +10,23 @@ function ensureAuthenticated(req, res, next) {
 
 // Login Route
 router.post('/login', passport.authenticate('local'), function(req, res, next) {
-  
     if (req.isAuthenticated())  { res.redirect('/profile') } else{res.redirect('/login')}
     
 });
 
+//logout Route
+// router.get('/logout', function (req, res) { 
+//   req.logOut(); // remove all session data 
+//   req.session = null; 
+//   res.redirect('/');
+//    });
+
+   router.get('/logout', async (req, res) => {
+    await req.logout();
+    req.session = null;
+    return res.send({ message: "You have sucsessfully logged out." });
+  })
+  
 // Register Route
 
 router.post('/register', function(req, res) {
@@ -27,6 +39,17 @@ router.post('/register', function(req, res) {
         });
     });
 });
+
+//Logout
+// router.get('/logout', function (req, res){
+//   req.logout();
+//   req.session.destroy(function (err) {
+//     res.redirect('/');
+//   }); 
+  
+// });
+
+
 
 // Restricted Routes
 
@@ -42,8 +65,6 @@ router.get('/mypage', function(req, res, next){
     res.send('MY PAGE');
    
 });
-
-
 
 
 module.exports = router;

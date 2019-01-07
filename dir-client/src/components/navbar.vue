@@ -15,7 +15,10 @@
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
       <a class="navbar-item">
-        Home
+        <router-link :to="{name: 'mainland'}">
+            Home
+          </router-link>
+      
       </a>
 
       <a class="navbar-item">
@@ -32,9 +35,6 @@
             About
           </a>
           <a class="navbar-item">
-            Jobs
-          </a>
-          <a class="navbar-item">
             Contact
           </a>
           
@@ -44,7 +44,13 @@
 
     <div class="navbar-end">
       <div class="navbar-item">
-        <div class="buttons">
+        <div v-if="isloggedin" class="buttons">
+         
+        <a class="button is-primary" @click="$router.push('profile')">Dashboard</a>
+        <a class="button is-warning" @click="userLogout">Logout</a> 
+        <p v-if="statusText">{{ statusText }}</p>
+        </div>
+         <div v-else class="buttons">
           <a class="button is-primary">
             <strong>Sign up</strong>
           </a>
@@ -53,7 +59,6 @@
             <div class="modal">
   <div class="modal-background has-background-lightgray"></div>
   <div class="modal-content fcolor">
-    
     
     <!-- Login Form Starts -->
   
@@ -93,8 +98,7 @@
             </div>
   <!-- Sign UP -->
 <p class="title">SIGNUP</p>
-        <div class="field ">
-        
+        <div class="field "> 
         <div class="control">
             <input class="input" type="text" placeholder="Your Name">
         </div>
@@ -135,7 +139,6 @@
                 </span>
             </p>
             </div>
-
         <div class="field">
             <p class="control is-pulled-right">
                 <button class="button is-success ">
@@ -143,15 +146,10 @@
                 </button>
             </p>
             </div>
-   
-
-</div>
-
-    
-  </div>
-  <button class="modal-close is-large" aria-label="close" @click="closemodel"></button>
-</div>
-          
+            </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close" @click="closemodel"></button>
+          </div>
         </div>
       </div>
     </div>
@@ -160,12 +158,15 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     
   name: 'navbar',
   data(){
         return{
-        
+          isloggedin: localStorage.getItem('user'),
+          statusText : null
         }
     },
     components: {
@@ -177,7 +178,25 @@ export default {
         },
         closemodel(){
             document.querySelector('.modal').classList.remove('is-active')
+        },
+        userLogout(){
+          let self = this;
+            //  if (localStorage.getItem('user') != null){
+                axios.get("http://localhost:3030/auth/logout")
+                      .then((response)=>{
+                      console.log(response.data.message)
+                      self.statusText = response.data.message; // Show logged out message to user
+                      localStorage.removeItem('user')
+                      self.$router.push('/')
+                      })
+                      .catch(error => {
+                            console.log(error);
+                            });
+                            // }
         }
+    },
+    mounted(){
+  
     }
 }
 </script>
@@ -190,6 +209,5 @@ export default {
 .fcolor{
     color:lightslategray;
     background-color:rgba(230, 227, 227, 0.856); 
-    
 }
 </style>

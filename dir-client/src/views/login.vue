@@ -1,5 +1,6 @@
 <template>
-  
+<div>
+  <navbar />
  <div class="block loginform">
          <p class="title">LOGIN</p>
           <p class="subtitle">LOGIN</p>
@@ -39,9 +40,11 @@
             <div class="field">
             
             </div></div>
+ </div>
   </template>
 
 <script>
+import navbar from '@/components/navbar'
 import axios from 'axios'
   export default {
     name: 'login',
@@ -71,7 +74,7 @@ import axios from 'axios'
       })}
     },
     components: {
-      
+      navbar
     }
   }
 </script>

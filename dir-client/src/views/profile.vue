@@ -1,14 +1,17 @@
 <template>
-  
+<div>
+  <navbar />
  <div class="block loginform">
-         <p class="title">PROFİLE {{user}}</p>
-          <p class="subtitle">LOGIN</p>
+         <p class="title">Profile Page for {{user}}</p>
+          <p class="subtitle">Dashboard</p>
         </div>
-  </template>
+</div>
+</template>
 
 <script>
-import axios from 'axios'
-  export default {
+import navbar from '@/components/navbar'
+
+export default {
     name: 'profile',
     data(){
         return{
@@ -20,19 +23,16 @@ import axios from 'axios'
      
     },
     components: {
-      
+      navbar
     },
     created(){
-       
-        let loggedin = localStorage.getItem('user');
-        if (loggedin != null){
+               if (localStorage.getItem('user') != null){
                             this.user = localStorage.getItem('user');
-                            console.log(loggedin)
                             // if(this.$route.params.nextUrl != null){
                             //     this.$router.push(this.$route.params.nextUrl)
                             }
                             else{
-                                this.$router.push('/')
+                                this.$router.push('/auth/login')
                             }
     }
   }
