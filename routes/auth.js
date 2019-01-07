@@ -14,13 +14,7 @@ router.post('/login', passport.authenticate('local'), function(req, res, next) {
     
 });
 
-//logout Route
-// router.get('/logout', function (req, res) { 
-//   req.logOut(); // remove all session data 
-//   req.session = null; 
-//   res.redirect('/');
-//    });
-
+// Logut Route
    router.get('/logout', async (req, res) => {
     await req.logout();
     req.session = null;
@@ -35,23 +29,12 @@ router.post('/register', function(req, res) {
           return res.send("Sorry. That username already exists. Try again.");
         }
         passport.authenticate('local')(req, res, function () {
-          res.redirect('/');
+          return res.send({ message: "You have sucsessfully logged in." });
         });
     });
 });
 
-//Logout
-// router.get('/logout', function (req, res){
-//   req.logout();
-//   req.session.destroy(function (err) {
-//     res.redirect('/');
-//   }); 
-  
-// });
-
-
-
-// Restricted Routes
+// Restricted Routes will be here
 
 router.all("*", function(req, res, next){
     if (!req.user) 
@@ -60,11 +43,15 @@ router.all("*", function(req, res, next){
       next();
   });
 
-
-router.get('/mypage', function(req, res, next){
+// Test Route
+router.get('/profile/:user', function(req, res, next){
     res.send('MY PAGE');
+    if (req.isAuthenticated())  { 
+
+      
+      res.json(req.user);
+     } else{res.redirect('/login')}
    
 });
-
 
 module.exports = router;

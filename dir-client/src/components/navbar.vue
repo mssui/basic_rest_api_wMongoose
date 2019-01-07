@@ -46,7 +46,7 @@
       <div class="navbar-item">
         <div v-if="isloggedin" class="buttons">
          
-        <a class="button is-primary" @click="$router.push('profile')">Dashboard</a>
+        <a class="button is-primary" @click="$router.push('profile/'+ isloggedin)">Dashboard</a>
         <a class="button is-warning" @click="userLogout">Logout</a> 
         <p v-if="statusText">{{ statusText }}</p>
         </div>

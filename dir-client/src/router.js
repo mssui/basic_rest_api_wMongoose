@@ -33,7 +33,7 @@ export default new Router({
     }
     ,
     {
-      path: '/profile',
+      path: '/profile/:user',
       name: 'profile',
       component: () => import(/* webpackChunkName: "about" */ './views/profile.vue')
     }
