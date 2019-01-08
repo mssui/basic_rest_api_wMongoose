@@ -8,6 +8,7 @@ const Schema = mongoose.Schema;
 var commentSchema = new Schema({
   type: mongoose.Schema.Types.ObjectId,
   text: String,
+  title: String,
   author: {
       id: {
           type: mongoose.Schema.Types.ObjectId,

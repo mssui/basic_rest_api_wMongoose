@@ -25,6 +25,19 @@ router.get('/posts', async (req, res, next) => {
     // res.send(other);
 });
     
+//Slug Search Route, Get ID if it is already in DB REMOVE This Route
+
+router.get('/postslug/:id',   async function(req, res, next){
+        
+    // const searchedslug=  Posts.findSlug({slug: req.params.id}); // Find the post with that ID
+    // res.send(searchedslug).catch(next);
+
+    await Posts.findSlug({slug: req.params.id}).then(function(post){
+        res.send(post);
+    }).catch(next);
+
+});
+
 // add a new post to the db
 router.post('/addpost', async (req, res, next) => {
     const newpost = await Posts.add(req.body);
@@ -32,14 +45,6 @@ router.post('/addpost', async (req, res, next) => {
 });
 
 
-// update a post in the 
-router.put('/posts/:id', function(req, res, next){
-    Posts.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
-        Posts.findOne({_id: req.params.id}).then(function(post){
-            res.send(post);
-        });
-    }).catch(next);
-});
 
 // Add comment to existing post
 
@@ -83,7 +88,7 @@ router.get('/comments', async (req, res, next) => {
         postData.push({
             text: postMap[i].text,
             id: postMap[i].id,
-            user : postMap[i].username
+            user : postMap[i].author.username
         });
     }
     res.send(postData);
@@ -135,5 +140,12 @@ router.get('/slugs/:id',   async function(req, res, next){
 
 });
 
+//Get a user's posts by ID
 
+router.get('/posts/:id', async (req, res, next) => {    
+        Comments.find({'author.username': req.params.id}).then((data)=>{
+            res.send(data)
+    }).catch(next);
+
+});
 module.exports = router;

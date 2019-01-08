@@ -52,6 +52,47 @@
     </footer>
     </div>
   </div> -->
+
+
+
+
+<!-- <div class="column is-full is-centered">
+   <div class="box">
+  <article class="media">
+    <div class="media-left">
+      <figure class="image is-64x64">
+        <img src="https://img.icons8.com/doodle/1600/user-female-red-hair.png" alt="Image">
+      </figure>
+    </div>
+    <div class="media-content">
+      <div class="content">
+        <div class="subtitle is-4 s-lft metincont"><a class="read" href="#">Ogilvy </a> diye yazılır,<span class="write"> Ogilvi</span> diye okunur. </div>
+        <span class="is-pulled-right s-top"> <strong>John Smith</strong></span>
+      </div>
+      <nav class="level is-mobile">
+        <div class="level-left s-lft">
+          <a class="level-item" aria-label="reply">
+            <span class="icon is-small">
+              <i class="fas fa-reply" aria-hidden="true"></i>
+            </span>
+          </a>
+          <a class="level-item" aria-label="retweet">
+            <span class="icon is-small">
+              <i class="fas fa-retweet" aria-hidden="true"></i>
+            </span>
+          </a>
+          <a class="level-item" aria-label="like">
+            <span class="icon is-small">
+              <i class="fas fa-heart" aria-hidden="true"></i>
+            </span>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </article>
+</div>
+</div> -->
+
 </div>
 <!-- Footer Banner -->
   <footer class="footer">
@@ -72,12 +113,14 @@ export default {
         mains : [],
         titles : [],     
         comments: [],
+        author: [],
         list: [],
         listcom: [],
         entry: null,
         read: null,
         slug: null,
-        feedback: null
+        feedback: null,
+        user: null
         }
     },
   components: {
@@ -98,7 +141,7 @@ export default {
         if (slugId) {
           const postToSlug = await axios.post(`http://localhost:3030/posts/${slugId}/add`, {
                                   text: this.read,
-                                  author: {username: 'test'}});
+                                  author: {username: this.user}});
                                   console.log('Added to existing post');
           return postToSlug;
         // If Slug is false, create a new comment with new post ID
@@ -109,7 +152,10 @@ export default {
                                   console.log(response.data._id)
                                       axios.post(`http://localhost:3030/posts/${response.data._id}/add`, {
                                       text: this.read,
-                                      author: {username: 'test'}}).then(final => {console.log('created', final)
+                                      title: this.entry,
+                                      author: {username: this.user}}).then(final => {console.log('created', final)
+                                      this.entry = null
+                                      this.read = null
                                       })
                                 })
         }
@@ -122,8 +168,12 @@ export default {
     msg: String
     },
   created(){
-      axios.get("http://localhost:3030/posts")
-      .then(response => {
+      // Get User Info
+      if (localStorage.getItem('user') != null){this.user = localStorage.getItem('user');}
+
+       // Get Post Details                 
+        axios.get("http://localhost:3030/posts")
+        .then(response => {
         this.mains = JSON.stringify(response.data)
         this.mains = JSON.parse(this.mains)
 
@@ -139,29 +189,40 @@ export default {
         //     this.comments.push(currentComment.text);
         //       }
         // }
+        // Loop Post Titles  
         
         var container = document.getElementById("contain-loop");
         for (var i = 0; i < this.mains.length; i++) {
           var currentData = this.mains[i];
           this.titles.push(currentData.title);
-          container.innerHTML += '<div class="columns is-mobile"><div class="column is-three-fifths is-offset-one-fifth m-lg"><div class="card-content"></div><footer class="card-footer is-half is-pulled-right"><p class="card-footer-item"><a class="button is-small  is-fullwidth is-success is-outlined">DOĞRU</a></p><p class="card-footer-item"><a class="button is-small is-fullwidth is-danger is-outlined">YANLIŞ</a></p></footer></div></div>';
-          
-          var read = document.createElement('span');
+          container.innerHTML += '<div class="column is-full is-centered">' +
+    '<div class="box"><article class="media"><div class="media-left"><figure class="image is-64x64"><img src="https://img.icons8.com/doodle/1600/user-female-red-hair.png" alt="Image">' +
+      '</figure></div><div class="media-content"> <div class="content"><div class="subtitle is-4 s-lft metincont"></div></div>' +
+      '<nav class="level is-mobile"><div class="level-left s-lft"><a class="level-item" aria-label="reply">' +
+       '<span class="icon is-small"><i class="fas fa-arrow-alt-circle-up" aria-hidden="true"></i></span></a>' +
+        '<a class="level-item " aria-label="retweet"><span class="icon is-small">' +
+        '<i class="fas fa-arrow-alt-circle-down" aria-hidden="true"></i></span></a><a class="level-item" aria-label="like">' +
+         '<span class="icon is-small"> <i class="fas fa-heart" aria-hidden="true"></i>' +
+          '</span></a></div></nav></div></article></div></div>';
+          var span = document.createElement('span');
+          var read = document.createElement('a');
           read.className = 'read';
-          document.getElementsByClassName('card-content')[i].appendChild(read).innerHTML += currentData.title + ' <span class="stabletext"> diye yazılır,</span>';
-
-          // Select the div and append child for the title
+          document.getElementsByClassName('metincont')[i].appendChild(read).innerHTML += currentData.title ;
+          document.getElementsByClassName('metincont')[i].appendChild(span).innerHTML += ' diye yazılır, ';
+          // Loop Comment Titles  
           var currentComment = currentData.comments[currentData.comments.length -1];
           this.comments.push(currentComment.text);
           var write = document.createElement('span');
           write.className = 'write';
-          document.getElementsByClassName('card-content')[i].appendChild(write).innerHTML += currentComment.text + ' <span class="stabletext"> diye okunur.</span>';
+          document.getElementsByClassName('metincont')[i].appendChild(write).innerHTML += currentComment.text + ' diye okunur.';
           
-          // Will change after auth
-          var username = document.createElement('p');
-          username.className = 'subtitle is-pulled-right';
-          document.getElementsByClassName('card-content')[i].appendChild(username).innerHTML += 'UserName'
+          // Loop Usernames  
 
+          var currentUser = currentData.comments[currentData.comments.length -1];
+          this.author.push(currentUser.author.username);
+          var username = document.createElement('span');
+          username.className = 'is-pulled-right s-top has-text-weight-bold cap';
+          document.getElementsByClassName('content')[i].appendChild(username).innerHTML += currentUser.author.username;
         }
       })
       .catch(error => {
@@ -180,7 +241,7 @@ input[type=text] {
   height: 4em !important;    
 }    
  
-.read {
+/* .read {
   display: inline-block;
   font-size: 20px;
   font-weight: bold;
@@ -194,11 +255,14 @@ input[type=text] {
   font-weight: bold;
   letter-spacing: 1px;
   color:cadetblue;
-}
+} */
 
 .stable-text{
   display: inline-block;
   font-size: 18px;
+}
+.cap:first-letter {
+    text-transform:capitalize;
 }
 .m-lg {
   margin: 1em;

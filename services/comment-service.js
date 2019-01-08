@@ -7,10 +7,13 @@ const commentModel = require('../models/comment-model');
 async function add(comments) {
     return commentModel.create(comments);
 }
-
+async function find(params) { 
+    return commentModel.find(params)
+}
 module.exports = {
     findAll,
-    add
+    add,
+    find
 };
 
 
