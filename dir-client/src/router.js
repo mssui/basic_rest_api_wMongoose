@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import mainland from '@/components/mainland'
-import entries from '@/components/entries'
 
 Vue.use(Router)
 
@@ -38,11 +37,6 @@ export default new Router({
       name: 'profile',
       component: () => import(/* webpackChunkName: "about" */ './views/profile.vue')
     }
-    ,
-    {
-      path: '/slugs/:id',
-      name: 'entries',
-      component: entries
-    }
+    
   ]
 })
