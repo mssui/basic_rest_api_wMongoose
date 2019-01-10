@@ -1,21 +1,29 @@
 
 <template>
-<div class="column is-full is-centered">
+<div>
   <navbar />
- <div class="block loginform">
-    <p class="title">Profile Page for {{user}}</p>
-    <p class="subtitle">Dashboard</p>
-  </div>
-
+    <section class="hero is-primary is-medium is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+              Dashboard for {{user}}
+          </h1>
+          <h2 class="subtitle">
+            {{ bio }}
+          </h2>
+        </div>
+      </div>
+    </section>
+ 
+<div class="column is-full is-centered">
   <div id="contain-loop">
   </div>
-
+</div>
 </div>
 </template>
 
 <script>
 import navbar from '@/components/navbar'
-
 import axios from 'axios'
 export default {
     name: 'profile',
@@ -26,10 +34,7 @@ export default {
         posts: [],
         titles: [],
         comments: [],
-       questions: [
-      ['test1.1', 'test1.2'],
-      ['test2.1', 'test2.2']
-    ]
+        userpic: null,
     };
   },
     methods: {
@@ -40,13 +45,13 @@ export default {
     },
     mounted() {
     if (localStorage.getItem('user') != null){
-                this.user = localStorage.getItem('user');
-                // if(this.$route.params.nextUrl != null){
-                //     this.$router.push(this.$route.params.nextUrl)
-                }
-                else{
-                    this.$router.push('/auth/login');
-                }  
+      this.user = localStorage.getItem('user');
+            // if(this.$route.params.nextUrl != null){
+            //     this.$router.push(this.$route.params.nextUrl)
+      }
+      else{
+        this.$router.push('/auth/login');
+      }  
 
     axios.get(`http://localhost:3030/posts/${this.user}`)
     .then(response => {

@@ -2,8 +2,9 @@
 <template>
   <div class="app">
     <navbar />
+    <animation />
     <!-- Main Banner -->
-    <section class="hero is-primary is-medium is-bold">
+    <!-- <section class="hero is-primary is-medium is-bold">
       <div class="hero-body">
         <div class="container">
           <h1 class="title">
@@ -14,7 +15,7 @@
           </h2>
         </div>
       </div>
-    </section>
+    </section> -->
     <!-- Entry Blocks -->
 
     <div class="columns is-mobile">
@@ -80,6 +81,7 @@
 import axios from 'axios'
 import slugify from 'slugify'
 import navbar from './navbar.vue'
+import animation from './animation.vue'
 
 export default {
   name: 'Mainland',
@@ -100,6 +102,7 @@ export default {
   },
   components: {
     navbar,
+    animation
   },
   methods: {
     async postSend(event) {

@@ -2,8 +2,7 @@ const express = require ('express');
 const router = express.Router();
 const Posts = require('../services/post-service');
 const Comments = require('../services/comment-service');
-
-
+const User = require('../models/user-model');
 
 // get a list of posts from the db
 
@@ -44,10 +43,7 @@ router.post('/addpost', async (req, res, next) => {
     res.send(newpost);
 });
 
-
-
 // Add comment to existing post
-
 
 router.post('/posts/:id/add',  async function(req, res, next){
         
@@ -148,4 +144,27 @@ router.get('/posts/:id', async (req, res, next) => {
     }).catch(next);
 
 });
+
+router.get('/infos/:id', async (req, res, next) => {    
+      await User.find({ 'username': req.params.id}).then((data)=>{
+            let userData = []; 
+            userData.push({
+            image: data[0].image,
+            bio: data[0].bio,
+            gender: data[0].gender
+            });
+        res.send(userData)
+        });
+      });
+
+
+      // Test Route
+router.get('/profile/:user', (req, res, next) => {
+    res.send('MY PAGE');
+    if (req.isAuthenticated()) {
+      res.json(req.user);
+    } else { res.redirect('/login'); }
+  });
+  
+      
 module.exports = router;

@@ -38,6 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 
+
   
 app.use('/', require('./routes/api'));
 app.use('/auth', require('./routes/auth'));

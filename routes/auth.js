@@ -1,5 +1,4 @@
 const express = require('express');
-
 const router = express.Router();
 const passport = require('passport');
 const User = require('../models/user-model');
@@ -24,11 +23,11 @@ router.get('/logout', async (req, res) => {
 // Register Route
 
 router.post('/register', (req, res) => {
-  User.register(new User({ username: req.body.username }), req.body.password, (err, account) => {
+  User.register(new User({ username: req.body.username, bio: req.body.bio, image: req.body.image, gender: req.body.gender, email: req.body.email }), req.body.password, (err, account) => {
     if (err) {
       return res.send('Sorry. That username already exists. Try again.');
     }
-    passport.authenticate('local')(req, res, () => res.send({ message: 'You have sucsessfully logged in.' }));
+    passport.authenticate('local')(req, res, () => res.send({ message: 'You have sucsessfully created account and logged in.' }));
   });
 });
 
@@ -37,14 +36,6 @@ router.post('/register', (req, res) => {
 router.all('*', (req, res, next) => {
   if (!req.user) res.send(403);
   else next();
-});
-
-// Test Route
-router.get('/profile/:user', (req, res, next) => {
-  res.send('MY PAGE');
-  if (req.isAuthenticated()) {
-    res.json(req.user);
-  } else { res.redirect('/login'); }
 });
 
 module.exports = router;

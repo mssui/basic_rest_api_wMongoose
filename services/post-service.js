@@ -12,7 +12,6 @@ async function findOne(id) {
     return postModel.findOne({id});
 }
 
-
 async function findById(id) {
     return postModel.findOne(id);
 }
